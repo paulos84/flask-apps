@@ -11,4 +11,3 @@ class Product(db.Model):
 
     def __repr__(self):
         return '<Product %d>' % self.id
-    
