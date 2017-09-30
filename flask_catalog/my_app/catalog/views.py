@@ -32,3 +32,5 @@ def create_product():
     db.session.add(product)
     db.session.commit()
     return 'Product created.'
+
+
