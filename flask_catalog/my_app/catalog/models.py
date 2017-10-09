@@ -26,3 +26,9 @@ class Category(db.Model):
 
     def __repr__(self):
         return '<Category %d>' % self.id
+    
+
+class ProductForm(FlaskForm):
+    name = StringField('Name')
+    price = DecimalField('Price')
+    category = SelectField('Category', coerce=int)
