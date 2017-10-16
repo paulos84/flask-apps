@@ -1,11 +1,13 @@
 
-#Authenticating an API using JSON Web Tokens
+#Authenticating an API using Flask-SQL Alchemy and JSON Web Tokens
 
 from flask import Flask, request, make_response, jsonify
 import jwt
 import datetime
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
+import uuid
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -27,14 +29,19 @@ class Todo(db.Model):
     text = db.Column(db.String(50))
     complete = db.Column(db.Boolean)
     user_id = db.Column(db.Integer)
-    
+
 @app.route('/user', methods=['GET'])
 def get_all_users():
     return ''
 
 @app.route('/user/<user_id>', methods=['POST'])
 def create_user():
-    return ''
+    data = request.get_json()
+    hashed_password = generate_password_hash(data['password'], method='sha256')
+    new_user = User(public_id=str(uuid.uuid4()), name=date['name'], password=hashed_password, admin=False)
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message': 'new user created'})
 
 @app.route('/user/<user_id>', methods=['PUT'])
 def promote_user():
