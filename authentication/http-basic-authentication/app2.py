@@ -1,3 +1,6 @@
+
+# Basic HTTP authentication for multiple routes using decorators
+
 from flask import Flask, request, make_response
 from functools import wraps
 
