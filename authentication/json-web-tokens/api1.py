@@ -1,5 +1,4 @@
 
-
 #Authenticating an API using JSON Web Tokens
 
 from flask import Flask, request, make_response, jsonify
@@ -24,13 +23,16 @@ def token_required(f):
         except:
             return jsonify({'message': 'Token is invalid'}), 403
         return f(*args, **kwargs)
+    return decorated
 
 
 @app.route('/unprotected')
 def unprotected():
     return jsonify({'message': 'Anyone can see this'})
 
+# go to '/login', copy the token provided, then paste at end of '/protected?token='
 @app.route('/protected')
+@token_required
 def protected():
     return jsonify({'message': 'This is only viewable for people with token'})
 
@@ -38,7 +40,8 @@ def protected():
 def login():
     auth = request.authorization
     if auth and auth.password == 'password':
-        token = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)})
+        token = jwt.encode({'user': auth.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+                           app.config['SECRET_KEY'])
         return jsonify({'token': token.decode('UTF-8')})
     return make_response('Could not verify!', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
