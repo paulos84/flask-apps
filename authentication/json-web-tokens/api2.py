@@ -90,5 +90,15 @@ def delete_user(public_id):
     return jsonify({'message': 'The user has been deleted'})
 
 
+@app.route('/login')
+def login():
+    auth = request.authorization
+    if not auth or not auth.username or not auth.password:
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
+    user = User.query.filter_by(name=auth.username).first()
+    if not user:
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+
 if __name__ == '__main__':
     app.run(debug=True)
