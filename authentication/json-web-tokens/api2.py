@@ -32,13 +32,25 @@ class Todo(db.Model):
 
 @app.route('/user', methods=['GET'])
 def get_all_users():
+    users= User.query.all()
+    output = []
+    for user in users:
+        user_data = {}
+        user_data['public_id'] = user.public_id
+        user_data['name'] = user.name
+        user_data['password'] = user.password
+        output.append(user_data)
+    return jsonify(output)
+
+@app.route('/user/<user_id>', methods=['GET'])
+def get_one_users():
     return ''
 
-@app.route('/user/<user_id>', methods=['POST'])
+@app.route('/user', methods=['POST'])
 def create_user():
     data = request.get_json()
     hashed_password = generate_password_hash(data['password'], method='sha256')
-    new_user = User(public_id=str(uuid.uuid4()), name=date['name'], password=hashed_password, admin=False)
+    new_user = User(public_id=str(uuid.uuid4()), name=data['name'], password=hashed_password, admin=False)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'new user created'})
@@ -52,4 +64,4 @@ def delete_user():
     return ''
 
 if __name__ == '__main__':
-    app.run(debug=Trsue)
+    app.run(debug=True)
