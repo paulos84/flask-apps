@@ -17,12 +17,12 @@ class City(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     country = db.Column(db.String(50))
-
+    user = db.relationship('User', backref='owner', lazy='dynamic')
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
-    age = db.Column(db.Integer(50))
+    city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
 
 
 if __name__ == '__main__':
