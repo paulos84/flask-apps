@@ -25,5 +25,54 @@ class User(db.Model):
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
 
 
+class UserAPI(Resource):  #The API class that handles a single user
+  def __init__(self):
+    #Initialize
+
+  def get(self, id):
+    #GET requests
+
+  def put(self, id):
+    #PUT requests
+
+  def delete(self, id):
+    #DELETE requests
+
+
+class UserListAPI(Resource):  #The API class that handles the whole group of Users
+  def __init__(self):
+
+  def get(self):
+
+  def post(self):
+
+
+api.add_resource(UserAPI, '/api/user/<int:id>', endpoint = 'user')
+api.add_resource(UserListAPI, '/api/users/', endpoint = 'users')
+
+
+class CityAPI(Resource):
+  def __init__(self):
+
+  def get(self, id):
+
+  def put(self, id):
+
+  def delete(self, id):
+
+
+class CityListAPI(Resource):
+  def __init__(self):
+
+  def get(self):
+
+  def post(self):
+
+
+api.add_resource(CityListAPI, '/api/cities/', endpoint = 'cities')
+api.add_resource(CityAPI, '/api/city/<int:id>', endpoint = 'city')
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
