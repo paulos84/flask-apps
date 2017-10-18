@@ -34,9 +34,32 @@ class Todo(db.Model):
     public_id = db.Column(db.Integer)
 
 
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        if not token:
+            return jsonify({'message': 'token is missing'})
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+            current_user = User.query.filter_by(public_id=data['public_id']).first()
+        except:
+            return jsonify({'message': 'token is invalid'}), 401
+        return f(current_user, *args, **kwargs)
+    return decorated
+
+
+
 @app.route('/user', methods=['GET'])
-def get_all_users():
-    users= User.query.all()
+@token_required
+# current_user is a SQLAlchemy db object - defined in @token_required
+def get_all_users(current_user):
+    # first check whether current_user.admin == True
+    if not current_user.admin:
+        return jsonify({'message': 'no user found'})
+    users = User.query.all()
     output = []
     for user in users:
         user_data = {}
@@ -49,7 +72,8 @@ def get_all_users():
 
 
 @app.route('/user/<public_id>', methods=['GET'])
-def get_one_users(public_id):
+@token_required
+def get_one_users(current_user, public_id):
     user = User.query.filter_by(public_id=public_id).first()
     if not user:
         return jsonify({'message': 'no user found'})
@@ -61,7 +85,8 @@ def get_one_users(public_id):
 
 
 @app.route('/user', methods=['POST'])
-def create_user():
+@token_required
+def create_user(current_user):
     data = request.get_json()
     hashed_password = generate_password_hash(data['password'], method='sha256')
     new_user = User(public_id=str(uuid.uuid4()), name=data['name'], password=hashed_password, admin=False)
@@ -71,7 +96,8 @@ def create_user():
 
 
 @app.route('/user/<public_id>', methods=['PUT'])
-def promote_user(public_id):
+@token_required
+def promote_user(current_user, public_id):
     user = User.query.filter_by(public_id=public_id).first()
     if not user:
         return jsonify({'message': 'no user found'})
@@ -81,7 +107,8 @@ def promote_user(public_id):
 
 
 @app.route('/user/<public_id>', methods=['DELETE'])
-def delete_user(public_id):
+@token_required
+def delete_user(current_user, public_id):
     user = User.query.filter_by(public_id=public_id).first()
     if not user:
         return jsonify({'message': 'no user found'})
