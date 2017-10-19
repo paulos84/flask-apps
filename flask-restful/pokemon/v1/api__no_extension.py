@@ -19,7 +19,7 @@ def pokemon():
         except ValueError:
             return jsonify({})
         if 'number' in new_pokemon and isinstance(new_pokemon['number'], int) and 'name' in new_pokemon and isinstance(
-                new_pokemon['name']) and len(new_pokemon.keys()) == 2 and new_pokemon not in pokedex:
+                new_pokemon['name', str]) and len(new_pokemon.keys()) == 2 and new_pokemon not in pokedex:
             pokedex.append(new_pokemon)
             response = pokedex[-1]
         else:
