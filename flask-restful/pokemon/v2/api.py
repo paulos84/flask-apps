@@ -7,20 +7,20 @@ api = Api(app)
 
 
 pokedex = [{
-    'number': 14,
+    'number': '14',
     'name': 'Kakuna',
     'type': ['bug', 'poison'],
     'weaknesses': ['fire', 'flying', 'psychic', 'rock'],
     'evolutions': [{'number': 15, 'name': 'beedrill'}]
 }, {
-    'number': 16,
+    'number': '16',
     'name': 'Pidgey',
     'type': ['normal', 'flying'],
     'weaknesses': ['electric', 'ice', 'rock'],
     'evolutions': [{'number': 17, 'name': 'Pidgeotto'},
                    {'number': 18, 'name': 'Pidgeot'}]
 }, {
-    'number': 51,
+    'number': '43',
     'name': 'Dugtrio',
     'type': ['ground'],
     'weaknesses': ['grass', 'ice', 'water'],
@@ -31,22 +31,20 @@ pokedex = [{
 class Pokemon(Resource):
     def get(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('naumber', required=False, type=int, location='args')
-        
-
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str, required=True, location='json')
-        parser.add_argument('number', type=int, required=True, location='json')
-
+        parser.add_argument('number', required=False, type=str, location='args')
         args = parser.parse_args(strict=True)
-        pokemon = {'name': args['name'], 'number': args['number']}
+        number = args.get('number')
+        # could have?... if number:
+        if number is not None:
+            if number in [a['number'] for a in pokedex]:
+                return [a for a in pokedex if a['number'] == number][0]
+            else:
+                return {}
+        return pokedex
 
-        if pokemon in pokedex:
-            return {}
-
-        pokedex.append(pokemon)
-        return pokedex[-1]
+    #def post(self):
+     #   parser = reqparse.RequestParser()
+      #  parser.add_argument
 
 
 api.add_resource(Pokemon, '/api/v1/pokemon')
