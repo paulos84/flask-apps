@@ -1,16 +1,3 @@
-from flask import request, jsonify, Blueprint
-from my_app import app, db
-from my_app.catalog.models import Product
-
-
-catalog = Blueprint('catalog', __name__)
-
-
-@catalog.route('/')
-@catalog.route('/home')
-def home():
-    return "Welcome to the Catalog Home."
-
 
 @catalog.route('/products')
 def products():
@@ -33,4 +20,31 @@ def create_product():
     db.session.commit()
     return 'Product created.'
 
+
+class ProductForm(FlaskForm):
+    name = StringField('name')
+    price = IntegerField('price')
+
+
+@catalog.route('/form', methods=['GET', 'POST'])
+def product_form():
+    form = ProductForm()
+
+    if form.validate_on_submit():
+        return 'The username is {}. The password is {}'.format (form.username.data, form.password.data)
+    return render_template('form.html', form=form)
+
+
+class LoginForm(FlaskForm):
+    username = StringField('username')
+    password = PasswordField('password')
+
+
+@catalog.route('/form', methods=['GET', 'POST'])
+def form():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        return 'The username is {}. The password is {}'.format (form.username.data, form.password.data)
+    return render_template('form.html', form=form)
 
