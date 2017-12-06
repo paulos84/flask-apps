@@ -1,5 +1,5 @@
 import unittest
-from app import chart_data
+from app2 import chart_data
 
 
 class TestChartData(unittest.TestCase):

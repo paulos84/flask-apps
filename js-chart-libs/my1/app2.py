@@ -36,6 +36,8 @@ def chart_data(pollutant, site, days):
     return [times, values]
 
 
+
+
 @app.route('/<pollutant>/<site>')
 def make_chart(pollutant, site, chartID='chart_ID', chart_type='line', chart_height=550,
                chart_width=800):
@@ -49,10 +51,7 @@ def make_chart(pollutant, site, chartID='chart_ID', chart_type='line', chart_hei
     return render_template('chart.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis,
                            yAxis=yAxis)
 
-
-if __name__ == "__main__":
-    app.run(host='127.0.0.2')
-
+# test chart_data() so that know what it returns when called inside make_chart()
 """
 def get_json(site, days):
     url = get_json_url(site, days)
@@ -75,6 +74,21 @@ def get_data(site, days):
     return dict(pm1=pm1, pm2=pm2, no2=no2, hours=hours)
 
 
+@app.route('/chart/<pollutant>/<site_code>/<int:days>')
+def make_chart(pollutant, site_code, days, chartID='chart_ID', chart_type='line', chart_height=550, chart_width=800):
+    recent_data = get_data(pollutant, site_code, days)
+    chart = {"renderTo": chartID, "type": chart_type, "height": chart_height, "width": chart_width}
+    series = [{"name": 'NO2', "data": [a for a in recent_data.values()]}]
+    title = {"text": 'Nitrogen Dioxide and PM10 Measurements'}
+    xaxis = {"categories": [a for a in recent_data.keys()]}
+    yaxis = {"title": {"text": 'Concentration (ug/m3)'}}
+    return render_template('chart.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xaxis, yAxis=yaxis)
+"""
+
+if __name__ == "__main__":
+    app.run(host='127.0.0.2')
+
+"""
 @app.route('/chart/<site><int:days>')
 def make_chart(site='MY1', days=1, chartID='chart_ID', chart_type='line', chart_height=550, chart_width=800):
     data_dict = get_data(site, days)
