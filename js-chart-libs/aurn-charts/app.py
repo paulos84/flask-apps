@@ -8,7 +8,7 @@ app = Flask(__name__)
     # 2 sites and multiple pollutants
 
 
-def chart_data(pollutant, site, days):
+def chart_data(pollutant, days):
     url = 'http://127.0.0.1:5000/data/{0}/{1}/{2}'.format(pollutant, site, start)
     # url = 'http://air-aware.com:8083/data/{0}/{1}/{2}'.format(pollutant, site, start)
     data = requests.get(url).json()
