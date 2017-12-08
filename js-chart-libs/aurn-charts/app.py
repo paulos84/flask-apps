@@ -8,13 +8,14 @@ app = Flask(__name__)
     # 2 sites and multiple pollutants
 
 
-def chart_data(pollutant, days):
-    url = 'http://127.0.0.1:5000/data/{0}/{1}/{2}'.format(pollutant, site, start)
-    # url = 'http://air-aware.com:8083/data/{0}/{1}/{2}'.format(pollutant, site, start)
-    data = requests.get(url).json()
-    times = [a['time'] for a in data['data']]
-    values = ['' if a['value'] in ['n/a', 'n/m'] else int(a['value']) for a in data['data']]
-    return [times, values]
+def chart_data(site, days, poll_1,  poll_2):
+    url = 'http://www.air-aware.com:8083/data/{0}/{1}'.format(site, days)
+    resp = requests.get(url).json()
+    data = resp['MY1']['latest_data']
+    times = [a['time'] for a in data]
+    series_1 = ['' if a['values'][poll_1] in ['n/a', 'n/m'] else int(a['values'][poll_1]) for a in data]
+    series_2 = ['' if a['values'][poll_2] in ['n/a', 'n/m'] else int(a['values'][poll_2]) for a in data]
+    return [times, series_1, series_2]
 
 
 @app.route('/<pollutant>/<site>/<int:days>')
@@ -23,7 +24,6 @@ def make_chart(pollutant, site, days, chartID='chart_ID', chart_type='line', cha
     chart = {"renderTo": chartID, "type": chart_type, "height": chart_height, "width": chart_width}
     data = chart_data(pollutant, site, days)
     series = [{"name": 'gjh', "data": data[1]}]
-
     # CAN REMOVE NAME FROM SERIES??
     title = {"text": '{} levels at {}'.format(pollutant, site)}
     xAxis = {"title": {"text": 'Time (GMT)'}, "categories": [1,2,3,4]}
