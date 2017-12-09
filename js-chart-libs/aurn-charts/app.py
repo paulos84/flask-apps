@@ -15,7 +15,7 @@ def chart_data(site, days, p1, p2):
     times = [a['time'] for a in data]
     s1 = ['' if a['values'][p1] in ['n/a', 'n/m'] else int(a['values'][p1]) for a in data]
     s2 = ['' if a['values'][p2] in ['n/a', 'n/m'] else int(a['values'][p2]) for a in data]
-    return {'times': times, 's1': s1, 's2': s2}
+    return {'times': times, 's1': s1, 's2': s2, 'site_name': resp[site.upper()]['info']['name']}
 
 
 @app.route('<site>/<int:days>/<pollutant_1>/<pollutant_2>')
@@ -24,7 +24,7 @@ def make_chart(site, days, pollutant_1, pollutant_2, chartID='chart_ID', chart_t
     chart = {"renderTo": chartID, "type": chart_type, "height": chart_height, "width": chart_width}
     data = chart_data(site, days, pollutant_1,  pollutant_2)
     series = [{"name": pollutant_1, "data": data['s1']}, {"name": pollutant_2, "data": data['s2']}]
-    title = {"text": 'Recent air pollution levels at {}'.format(site)}
+    title = {"text": 'Recent air pollution levels at {}'.format(data['site_name'])}
     xAxis = {"title": {"text": 'Time (GMT)'}, "categories": data['times']}
     yAxis = {"title": {"text": 'Concentration (ug/m-3)'}}
     return render_template('chart.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis,
