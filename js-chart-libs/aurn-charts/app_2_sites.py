@@ -4,9 +4,6 @@ import requests
 
 app = Flask(__name__)
 
-# TO DO - make interpolated values instead of '', multiple sites (e.g. MY1, NKENS)
-    # 2 sites and multiple pollutants
-
 
 def chart_data(site, days, *args, site2=None):
     if site2:
@@ -37,34 +34,22 @@ def make_chart(site, days, pollutant_1, pollutant_2=None, chartID='chart_ID', ch
                            yAxis=yAxis)
 
 
-@app.route('<site_1>/<site_2>/<int:days>/<pollutant_1>/<pollutant_2>')
+@app.route('two_sites/<site_1>/<site_2>/<int:days>/<pollutant_1>/<pollutant_2>')
 def plot_two_sites(site_1, site_2, days, pollutant_1, pollutant_2=None, chartID='chart_ID', chart_type='line',
                    chart_height=550, chart_width=800):
     chart = {"renderTo": chartID, "type": chart_type, "height": chart_height, "width": chart_width}
     data_1 = chart_data(site_1, days, pollutant_1, pollutant_2)
     data_2 = chart_data(site_2, days, pollutant_1, pollutant_2)
-    # check by doing for a in series_copy: if a == True: series.append(a)  - see below
-    dict_list = [{"name": pollutant_1, "data": data_1['s1']}, {"name": pollutant_2, "data": data_1['s2']}]
-    series = []
-    for i in dict_list:
-        for a,b in i.items():
-            if b:
-                series.append()
-    title = {"text": 'Recent air pollution levels at {}'.format(site)}
-    xAxis = {"title": {"text": 'Time (GMT)'}, "categories": data['times']}
+    dict_list = [{"name": pollutant_1 + 'at' + site_1, "data": data_1['s1']},
+                 {"name": pollutant_2 + 'at' + site_1, "data": data_1['s2']},
+                 {"name": pollutant_1 + 'at' + site_2, "data": data_2['s1']},
+                 {"name": pollutant_2 + 'at' + site_2, "data": data_2['s2']}]
+    series = [a for a in dict_list if a['data']]
+    title = {"text": 'Recent air pollution levels at {} and {}'.format(site_1, site_2)}
+    xAxis = {"title": {"text": 'Time (GMT)'}, "categories": data_1['times']}
     yAxis = {"title": {"text": 'Concentration (ug/m-3)'}}
     return render_template('chart.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis,
                            yAxis=yAxis)
-
-
-"""
-tr = {'foo': 5, "name":None, 'ty':2}
-d = {}
-for a,b in tr.items():
-    if b:
-        d[a]=b
-d
-"""
 
 
 if __name__ == "__main__":

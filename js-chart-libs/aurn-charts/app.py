@@ -4,9 +4,6 @@ import requests
 
 app = Flask(__name__)
 
-# TO DO - make interpolated values instead of '', multiple sites (e.g. MY1, NKENS)
-    # 2 sites and multiple pollutants
-
 
 def chart_data(site, days, p1, p2):
     url = 'http://www.air-aware.com:8083/data/{0}/{1}'.format(site, days)
@@ -33,14 +30,3 @@ def make_chart(site, days, pollutant_1, pollutant_2, chartID='chart_ID', chart_t
 
 if __name__ == "__main__":
     app.run(host='127.0.0.2')
-
-"""
-To do: mention debugging of plotting using logging to check what values are passed to the Jinja2 template
-a = 'Look'
-b = 'leap!'
-c = [2]
-
-logging.basicConfig(filename='myapp.log', level=logging.INFO)
-logging.info('%s before you %s', a, b)
-logging.info( '%s', c)
-"""
