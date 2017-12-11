@@ -1,9 +1,7 @@
 from flask import Flask, render_template
 import requests
 
-
 app = Flask(__name__)
-
 
 def chart_data(site, days, *args, site2=None):
     if site2:
@@ -20,7 +18,6 @@ def chart_data(site, days, *args, site2=None):
         s2 = None
     return {'times': times, 's1': s1, 's2': s2}
 
-
 @app.route('<site>/<int:days>/<pollutant_1>/<pollutant_2>')
 def make_chart(site, days, pollutant_1, pollutant_2=None, chartID='chart_ID', chart_type='line', chart_height=550,
                chart_width=800):
@@ -32,7 +29,6 @@ def make_chart(site, days, pollutant_1, pollutant_2=None, chartID='chart_ID', ch
     yAxis = {"title": {"text": 'Concentration (ug/m-3)'}}
     return render_template('chart.html', chartID=chartID, chart=chart, series=series, title=title, xAxis=xAxis,
                            yAxis=yAxis)
-
 
 @app.route('two_sites/<site_1>/<site_2>/<int:days>/<pollutant_1>/<pollutant_2>')
 def plot_two_sites(site_1, site_2, days, pollutant_1, pollutant_2=None, chartID='chart_ID', chart_type='line',
