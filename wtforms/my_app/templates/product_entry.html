@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form</title>
+</head>
+<body>
+    <h3>Product Entry Form</h3>
+    <form method="POST" action="{{ url_for('catalog.product_entry') }}">
+        {{ form.csrf_token }}
+        {{ form.name.label }}
+        {{ form.name }}
+        <ul>
+            {% for error in form.name.errors %}
+            <li style="color:red;">{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {{ form.price.label }}
+        {{ form.price }}
+        <ul>
+            {% for error in form.price.errors %}
+            <li style="color:red;">{{ error }}</li>
+            {% endfor %}
+        </ul>
+        <input type="submit" value="submit">
+    </form>
+</body>
+</html>
