@@ -4,7 +4,7 @@ socket.on('connect', function() {
     socket.send('I am now connected!');
 
     // socket.emit('custom event', 'my string')
-    // the JS object will be converted to JSON data
+    // the JS object will be converted to JSON data. JSON can only be sent through emit, not send
     socket.emit('custom event', {'name': 'Paul'});
 
     socket.on('from flask', function(msg) {
