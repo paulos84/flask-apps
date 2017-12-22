@@ -48,6 +48,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="137" />
+    <option name="y" value="2" />
     <option name="width" value="1635" />
     <option name="height" value="1712" />
   </component>
@@ -101,7 +102,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Flask-SocketIO" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
@@ -253,7 +254,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="137" y="0" width="1635" height="1712" extended-state="1" />
+    <frame x="137" y="2" width="1635" height="1712" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24983902" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
