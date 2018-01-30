@@ -15,17 +15,17 @@ toolbar = DebugToolbarExtension(app)
 
 @app.route('/')
 def hello_world():
-    logging.warning("See this message in Flask Debug Toolbar!")
-    return redirect(url_for('fibonacci', num=50))
+        return redirect(url_for('fibonacci', num=50))
 
 
-@app.route('/fib/<int:num>')
-def fibonacci(num):
+@app.route('/fib')
+def fibonacci(num=50):
     fib = [0, 1]
     for i in range(num):
         if i == sum(fib[-2:]):
             fib.append(i)
-    return render_template('fib.html', fib_seq=', '.join(str(v) for v in fib))
+            logging.warning("Appended list with {}".format(i))
+    return render_template('fib.html', fib_seq=', '.join(fib))
 
 
 if __name__ == '__main__':
