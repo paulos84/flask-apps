@@ -19,13 +19,13 @@ def hello_world():
 
 
 @app.route('/fib')
-def fibonacci(num=50):
-    fib = [0, 1]
-    for i in range(num):
-        if i == sum(fib[-2:]):
-            fib.append(i)
-            logging.warning("Appended list with {}".format(i))
-    return render_template('fib.html', fib_seq=', '.join(fib))
+@app.route('/fib/<int:n>')
+def fib(n=50):
+    a,b = 0, 1
+    while a<n:
+        yield a
+        a, b = b, a+b
+    return render_template('fib.html', fib_seq=', [i for i in fib()])
 
 
 if __name__ == '__main__':
