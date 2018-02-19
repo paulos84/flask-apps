@@ -1,6 +1,5 @@
 from flask import Flask, Blueprint
 from flask_restplus import Api, Resource, fields
-from marshmallow import Schema, Fields
 
 app = Flask(__name__)
 blueprint = Blueprint('api', __name__, url_prefix='/api')
@@ -9,10 +8,8 @@ api = Api(blueprint, doc='/docs')  #doc=False
 app.register_blueprint(blueprint)
 app.config['SWAGGER_UI_JSONEDITOR'] = True
 
-#city = api.model('City', {'city': fields.String('The city')})  # 'id': fields.Integer
-
-class City(object):
-    def __init__(self, ):
+# The model() factory allows you to instantiate and register models to your API or Namespace.
+city = api.model('City', {'city': fields.String('The city')})  # 'id': fields.Integer
 
 cities = []
 tokyo = {'city': 'Tokyo'}
