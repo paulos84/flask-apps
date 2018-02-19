@@ -1,0 +1,1 @@
+Flask-Restful makes it very easy to prototype APIs and testing them using swagger, which also makes it easy for other people to understand it and saves having to create documentation
